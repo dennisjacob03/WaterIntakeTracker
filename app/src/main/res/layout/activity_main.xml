@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#F2F8FF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Water Intake Tracker"
+            android:textColor="#1565C0"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stay hydrated every day!"
+            android:textColor="#546E7A"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Today's Water Intake"
+            android:textColor="#37474F"
+            android:textSize="18sp"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/txtTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0 ml"
+            android:textColor="#0288D1"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
+
+
+        <!-- Daily Goal Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Daily Water Goal"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1565C0"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Input for Daily Goal -->
+        <EditText
+            android:id="@+id/edtGoal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter daily goal (ml)"
+            android:inputType="number"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:backgroundTint="#1976D2" />
+
+        <!-- Save Goal Button -->
+        <Button
+            android:id="@+id/btnSaveGoal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Daily Goal"
+            android:backgroundTint="#00897B"
+            android:textColor="#FFFFFF" />
+
+        <!-- Display Goal Progress -->
+        <TextView
+            android:id="@+id/txtProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0% completed"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#00897B"
+            android:gravity="center"
+            android:layout_marginTop="12dp" />
+
+        <!-- Horizontal Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progressWater"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:max="100"
+            android:progress="0"
+            android:progressTint="#00897B"
+            android:progressBackgroundTint="#CFD8DC"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Remaining Water -->
+        <TextView
+            android:id="@+id/txtRemaining"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2000 ml remaining"
+            android:textSize="14sp"
+            android:textColor="#546E7A"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter water amount (ml)"
+            android:textColor="#37474F"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/edtAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Example: 250"
+            android:inputType="number"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:backgroundTint="#1976D2" />
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Water"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#1976D2"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Intake History"
+            android:textColor="#1565C0"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="8dp" />
+
+        <ListView
+            android:id="@+id/listIntakes"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:divider="#CFD8DC"
+            android:dividerHeight="1dp" />
+
+    </LinearLayout>
+
+</ScrollView>
