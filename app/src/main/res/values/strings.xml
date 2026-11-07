@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">WaterIntakeTracker</string>
+
+    <string-array name="reminder_intervals">
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+    </string-array>
+
 </resources>

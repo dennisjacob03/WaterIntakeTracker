@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#F2F8FF">
+    android:background="#F2F8FF"
+    tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,6 +70,7 @@
             android:layout_height="wrap_content"
             android:hint="Enter daily goal (ml)"
             android:inputType="number"
+            android:textColor="#1d252a"
             android:minHeight="48dp"
             android:padding="12dp"
             android:backgroundTint="#1976D2" />
@@ -117,6 +120,54 @@
             android:gravity="center"
             android:layout_marginBottom="16dp" />
 
+        <!-- Reminder Settings Heading -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Water Reminder Settings"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#1565C0"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Enable or Disable Reminders -->
+        <Switch
+            android:id="@+id/switchReminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enable water reminders"
+            android:textSize="16sp"
+            android:padding="8dp" />
+
+        <!-- Reminder Interval Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reminder interval"
+            android:textSize="16sp"
+            android:textColor="#37474F"
+            android:layout_marginTop="8dp" />
+
+        <!-- Reminder Interval Dropdown -->
+        <Spinner
+            android:id="@+id/spinnerInterval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:entries="@array/reminder_intervals" />
+
+        <!-- Save Reminder Settings -->
+        <Button
+            android:id="@+id/btnSaveReminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Reminder Settings"
+            android:backgroundTint="#00897B"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp" />
+
 
         <TextView
             android:layout_width="match_parent"
@@ -132,6 +183,7 @@
             android:layout_height="wrap_content"
             android:hint="Example: 250"
             android:inputType="number"
+            android:textColor="#1d252a"
             android:minHeight="48dp"
             android:padding="12dp"
             android:backgroundTint="#1976D2" />

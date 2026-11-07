@@ -1,17 +1,26 @@
 
 package com.example.waterintaketracker;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.SharedPreferences;
 import android.widget.ProgressBar;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
@@ -39,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressWater;
 
     SharedPreferences preferences;
+    Switch switchReminder;
+    Spinner spinnerInterval;
+    Button btnSaveReminder;
 
     int dailyGoal = 2000;
 
@@ -46,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        preferences = getSharedPreferences(
+                "WaterTrackerPrefs",
+                MODE_PRIVATE
+        );
 
         edtAmount = findViewById(R.id.edtAmount);
         btnAdd = findViewById(R.id.btnAdd);
@@ -56,11 +73,49 @@ public class MainActivity extends AppCompatActivity {
         txtProgress = findViewById(R.id.txtProgress);
         txtRemaining = findViewById(R.id.txtRemaining);
         progressWater = findViewById(R.id.progressWater);
+        switchReminder = findViewById(R.id.switchReminder);
+        spinnerInterval = findViewById(R.id.spinnerInterval);
+        btnSaveReminder = findViewById(R.id.btnSaveReminder);
+        NotificationHelper.createChannel(this);
 
-        preferences = getSharedPreferences(
-                "WaterTrackerPrefs",
-                MODE_PRIVATE
+        if (Build.VERSION.SDK_INT >= 33) {
+
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(
+                        this,
+                        new String[]{
+                                Manifest.permission.POST_NOTIFICATIONS
+                        },
+                        200
+                );
+            }
+        }
+
+        // Load previously saved reminder settings
+        boolean reminderEnabled = preferences.getBoolean(
+                "reminderEnabled", false
         );
+
+        int savedInterval = preferences.getInt(
+                "reminderInterval", 1800000
+        );
+
+        switchReminder.setChecked(reminderEnabled);
+
+        // Restore selected interval
+        if (savedInterval == 1800000) {
+            spinnerInterval.setSelection(0);
+        } else if (savedInterval == 3600000) {
+            spinnerInterval.setSelection(1);
+        } else {
+            spinnerInterval.setSelection(2);
+        }
+
+        btnSaveReminder.setOnClickListener(v -> saveReminderSettings());
 
         dailyGoal = preferences.getInt("dailyGoal", 2000);
 
@@ -96,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
                     int recordId = intakeIds.get(position);
 
-                    new androidx.appcompat.app.AlertDialog.Builder(this)
+                    new AlertDialog.Builder(this)
                             .setTitle("Delete Record")
                             .setMessage("Are you sure you want to delete this intake record?")
                             .setPositiveButton("Delete", (dialog, which) -> {
@@ -122,6 +177,57 @@ public class MainActivity extends AppCompatActivity {
 
         loadIntakes();
     }
+
+    private void saveReminderSettings() {
+
+        boolean enabled = switchReminder.isChecked();
+
+        int interval;
+
+        int selectedPosition = spinnerInterval.getSelectedItemPosition();
+
+        if (selectedPosition == 0) {
+            interval = 30 * 60 * 1000;
+        } else if (selectedPosition == 1) {
+            interval = 60 * 60 * 1000;
+        } else {
+            interval = 2 * 60 * 60 * 1000;
+        }
+
+        preferences.edit()
+                .putBoolean("reminderEnabled", enabled)
+                .putInt("reminderInterval", interval)
+                .apply();
+
+        Toast.makeText(this,
+                enabled ? "Reminder settings saved!"
+                        : "Reminders disabled",
+                Toast.LENGTH_SHORT).show();
+        if (enabled) {
+
+            if (Build.VERSION.SDK_INT >= 33 &&
+                    ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED) {
+
+                Toast.makeText(this,
+                        "Allow notifications in app settings",
+                        Toast.LENGTH_LONG).show();
+
+                return;
+            }
+
+            ReminderScheduler.scheduleReminder(
+                    this, interval
+            );
+
+        } else {
+
+            ReminderScheduler.cancelReminder(this);
+        }
+    }
+
 
     private void showEditDialog(int position) {
         EditText input = new EditText(this);
@@ -321,7 +427,20 @@ public class MainActivity extends AppCompatActivity {
                     "Daily goal achieved! Great job!"
             );
         }
+        if (total >= dailyGoal) {
 
+            ReminderScheduler.cancelReminder(this);
+
+        } else if (preferences.getBoolean(
+                "reminderEnabled", false)) {
+
+            ReminderScheduler.scheduleReminder(
+                    this,
+                    preferences.getInt(
+                            "reminderInterval", 1800000
+                    )
+            );
+        }
         adapter.notifyDataSetChanged();
     }
 }
